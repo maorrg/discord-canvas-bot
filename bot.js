@@ -1,7 +1,7 @@
 //https://discordjs.guide/popular-topics/reactions.html#listening-for-reactions-on-old-messages
 require('dotenv').config()
 const { Client, Intents } = require('discord.js');
-const { DISCORD_CHANNEL_ID } = require('./constants');
+const { DISCORD_CHANNEL_ID, DISCORD_TESTING_CHANNEL_ID} = require('./constants');
 const { make_announcement, make_announcement_in_all_courses, delete_announcement, delete_announcement_from_all_courses } = require('./canvas_requests')
 
 const client = new Client({
@@ -28,7 +28,7 @@ function publish_if_canvas_reaction(){
         }
         msg = reaction.message
         if (msg.channel.id === DISCORD_CHANNEL_ID && reaction.emoji.name === "canvas"){
-            make_announcement_in_all_courses("[IGNORAR] Anuncio de testing del sistema", msg.content, msg.id);
+            make_announcement_in_all_courses("Anuncio", msg.content, msg.id);
         }
     });
 };
@@ -65,6 +65,26 @@ function delete_if_canvas_reaction(){
  }); 
 } */
 
+
+function verify_connection(){
+ client.on("messageCreate", (msg) => {
+    if (msg.author.bot) return;
+    if (msg.channel.id === DISCORD_TESTING_CHANNEL_ID){
+        try {
+            msg.reply("Funcionando correctamente :)");
+            return;
+        } catch (error) {
+            msg.reply("[ERROR] Funcionando incorrectamente :(");
+            console.log(error);
+            return;
+        }
+        return;
+    }
+ }); 
+}
+
+
 //publish_all_channel_messages();
+verify_connection();
 publish_if_canvas_reaction();
 delete_if_canvas_reaction();
