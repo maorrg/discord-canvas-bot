@@ -87,4 +87,5 @@ function verify_connection(){
 //publish_all_channel_messages();
 verify_connection();
 publish_if_canvas_reaction();
-delete_if_canvas_reaction();
+
+//delete_if_canvas_reaction();
